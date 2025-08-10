@@ -1,0 +1,58 @@
+
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sns,sqs,iam,sts,logs
+      - DATA_DIR=/var/lib/localstack/data
+      - ENFORCE_IAM=1
+      - LS_LOG=info
+    volumes:
+      - ./localstack-data:/var/lib/localstack/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  order-service:
+    build: ./services/order-service
+    environment:
+      - AWS_REGION=us-east-1
+      - AWS_ENDPOINT=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=${APP_ACCESS_KEY}
+      - AWS_SECRET_ACCESS_KEY=${APP_SECRET_KEY}
+      - TOPIC_ARN=arn:aws:sns:us-east-1:000000000000:car-events
+    depends_on: [localstack]
+
+  inventory-service:
+    build: ./services/inventory-service
+    environment:
+      - AWS_REGION=us-east-1
+      - AWS_ENDPOINT=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=${APP_ACCESS_KEY}
+      - AWS_SECRET_ACCESS_KEY=${APP_SECRET_KEY}
+      - TOPIC_ARN=arn:aws:sns:us-east-1:000000000000:car-events
+      - QUEUE_URL=http://localstack:4566/000000000000/inventory
+    depends_on: [localstack]
+
+  billing-service:
+    build: ./services/billing-service
+    environment:
+      - AWS_REGION=us-east-1
+      - AWS_ENDPOINT=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=${APP_ACCESS_KEY}
+      - AWS_SECRET_ACCESS_KEY=${APP_SECRET_KEY}
+      - TOPIC_ARN=arn:aws:sns:us-east-1:000000000000:car-events
+      - QUEUE_URL=http://localstack:4566/000000000000/billing
+    depends_on: [localstack]
+
+  contracts-service:
+    build: ./services/contracts-service
+    environment:
+      - AWS_REGION=us-east-1
+      - AWS_ENDPOINT=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=${APP_ACCESS_KEY}
+      - AWS_SECRET_ACCESS_KEY=${APP_SECRET_KEY}
+      - TOPIC_ARN=arn:aws:sns:us-east-1:000000000000:car-events
+      - QUEUE_URL=http://localstack:4566/000000000000/contracts
+    depends_on: [localstack]

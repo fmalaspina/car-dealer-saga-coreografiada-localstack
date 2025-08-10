@@ -1,0 +1,51 @@
+# ===== Maven / Java =====
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.iml
+*.log
+*.tmp
+hs_err_pid*
+
+# ===== IntelliJ IDEA / Eclipse =====
+.idea/
+*.ipr
+*.iws
+*.classpath
+*.project
+.settings/
+.vscode/
+
+# ===== OS files =====
+.DS_Store
+Thumbs.db
+
+# ===== Docker =====
+**/.docker/
+**/.dockerignore
+**/docker-compose.override.yml
+**/.env
+docker-data/
+
+# ===== LocalStack persisted data =====
+localstack/volume/
+.localstack/
+
+# ===== Terraform =====
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+crash.log
+
+# ===== Scripts output =====
+*.sh~
+*.bak
+*.swp
+
+# ===== Logs =====
+logs/
+*.log
+log/

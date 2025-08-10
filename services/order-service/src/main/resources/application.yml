@@ -1,0 +1,5 @@
+app:
+  aws:
+    region: ${AWS_REGION:us-east-1}
+    endpoint: ${AWS_ENDPOINT:http://localhost:4566}
+    topicArn: ${TOPIC_ARN}
